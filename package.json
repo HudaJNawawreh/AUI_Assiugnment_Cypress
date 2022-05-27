@@ -1,0 +1,22 @@
+{
+  "name": "aui-assignment",
+  "version": "1.0.0",
+  "description": "AUI Assignbment for Automation QA",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HudaJNawawreh/AUI_Assiugnment_Cypress.git"
+  },
+  "author": "Huda",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HudaJNawawreh/AUI_Assiugnment_Cypress/issues"
+  },
+  "homepage": "https://github.com/HudaJNawawreh/AUI_Assiugnment_Cypress#readme",
+  "devDependencies": {
+    "cypress": "^9.7.0"
+  }
+}
