@@ -17,12 +17,12 @@ const camera = '9~12.9MP'
 
 const finalDeviceName = 'Galaxy Z Fold3 5G'
 
-
-// This test will only make sure that the samsung website will open successfully
-it('Making sure the website opens', () => {
-  cy.visit(url)
-  cy.url().should('include', url)
-})
+describe('Testing Buying Smart Phone', () => {
+  before(() => {
+    // This will only make sure that the samsung website will open successfully before testing
+    cy.visit(url)
+    cy.url().should('include', url)
+  })
 
 //This test will bring you to the smartphone lists
 it('Go to the SmartPhones lists', () => {
@@ -82,10 +82,10 @@ it('Selecting the device and add it to the cart', () => {
 it('Checkout shopping cart as guest and verify unable to proceed with no data', () => {
 
   cy.log('Checkout as a gest')
-  cy.wait(10000)
+  cy.wait(5000)
   checkout.getContinueAsGuset().click()
 
-  cy.wait(10000)
+  cy.wait(5000)
 
   cy.log('Verify the Next button is disabled because no data was entered')
   checkout.getNextButton().should('be.disabled')
@@ -105,4 +105,4 @@ it('Verifying error message when entering invalid postal code', () => {
 
 })
 
-
+})
