@@ -1,71 +1,80 @@
 // AUI_Assignment.js created with Cypress By Huda Jameel
 //
 // This test was built for an Assignment for AUI Company
-const phoneClass= 'Galaxy Z'
-const diplaySize= '6.0 and above'
+import HomePage from '../../support/PageOpjects/HomePoge';
+import SmartPhones from '../../support/PageOpjects/SmartPhonesPage';
+import Checkout from '../../support/PageOpjects/CheckOut';
+
+const homePage = new HomePage();
+const smarphones = new SmartPhones();
+const checkout = new Checkout();
+
+const url = 'https://www.samsung.com/in/'
+const phoneClass = 'Galaxy Z'
+const diplaySize = '6.0 and above'
 const memorySize = '256GB'
 const camera = '9~12.9MP'
 
+const finalDeviceName = 'Galaxy Z Fold3 5G'
+
+
 // This test will only make sure that the samsung website will open successfully
 it('Making sure the website opens', () => {
-  cy.visit('https://www.samsung.com/in/')
-  cy.url().should('include', 'https://www.samsung.com/in/')
+  cy.visit(url)
+  cy.url().should('include', url)
 })
 
 //This test will bring you to the smartphone lists
 it('Go to the SmartPhones lists', () => {
 
+
   cy.log('Choose Mobile from the menue')
-  cy.get('.gnb__menu-btn > .icon > path').click()
-  cy.contains('Mobile').click()
+  homePage.getMainMenue().click()
+  homePage.getMobileOption().click()
 
   cy.log('Choose smarphones from the list')
-  cy.contains('Smartphones').click()
-  cy.contains('Overview').click()
+  homePage.getSmartPhoneOption().click()
+  homePage.gotOverViewOption().click()
   cy.url().should('include', '/smartphones/')
 })
- 
+
 //This test will seacrh for a phone with some specifications
 it('Quick search for a phone a ', () => {
   cy.log('Selecting class Galaxy Z')
-  cy.contains('.menu__select-field-text', 'Class').click()
-  cy.contains('.menu__list-option-text', phoneClass).click()
+  smarphones.getClassDropdown().click()
+  smarphones.getSpecificOption(phoneClass).click()
 
   cy.log('Selecting Display Size 6.0 and above')
-  cy.contains('.menu__select-field-text', 'Display Size').click()
-  cy.contains('.menu__list-option-text', diplaySize).click()
+  smarphones.getDisplaySizeDropdown().click()
+  smarphones.getSpecificOption(diplaySize).click()
 
   cy.log('Selecting Memory 256 GB')
-  cy.contains('.menu__select-field-text', 'Memory').click()
-  cy.contains('.menu__list-option-text', memorySize).click()
+  smarphones.getMemorySizeDropdown().click()
+  smarphones.getSpecificOption(memorySize).click()
 
   cy.log('Selecting Camera 9~12.9MP')
-  cy.contains('.menu__select-field-text', 'Camera').click()
-  cy.contains('.menu__list-option-text', camera).click()
+  smarphones.getCameraDropdown().click()
+  smarphones.getSpecificOption(camera).click()
 
   cy.log('click find')
-  cy.contains('.quick-search__cta', 'Find').click()
+  smarphones.getFindBotton().click()
 
 })
 
 //This test will select a device from the results and add it to the cart
 it('Selecting the device and add it to the cart', () => {
   cy.log('Select Galaxy Z Fold3 5g')
-  cy.get('[data-modeldisplay="Galaxy Z Fold3 5G"]').contains('Buy now').click()
-
+  //cy.get('[data-modeldisplay="Galaxy Z Fold3 5G"]').contains('Buy now').click()
+  checkout.getSelctedDevice(finalDeviceName).click()
   cy.contains('CONTINUE', { timeout: 10000 }).should('be.visible')
   cy.contains('CONTINUE').click({ force: true })
 
-  cy.get('.hubble-addon-page__product-cta > .s-cta-wrap > .cta', { timeout: 10000 }).should('be.visible')
-  cy.get('.hubble-addon-page__product-cta > .s-cta-wrap > .cta').click({ force: true })
-
-  cy.wait(1000)
-  cy.get('.hubble-addon-page__product-cta > .s-cta-wrap > .cta').click({ force: true })
-  cy.wait(1000)
+  checkout.clickSkipAsLongAsItIsExist()
 
   cy.log('Clicking Pay Now to enter the shopping cart')
   cy.wait(1000)
-  cy.contains('Pay Now').click()
+  checkout.getPayNowButton().should('be.visible')
+  checkout.getPayNowButton().click()
 
 })
 
@@ -73,10 +82,13 @@ it('Selecting the device and add it to the cart', () => {
 it('Checkout shopping cart as guest and verify unable to proceed with no data', () => {
 
   cy.log('Checkout as a gest')
-  cy.contains('Continue as guest').click()
+  cy.wait(10000)
+  checkout.getContinueAsGuset().click()
 
-  cy.log('Verify the Next button is disabled becasue no data was enytered')
-  cy.contains('Next').should('be.disabled')
+  cy.wait(10000)
+
+  cy.log('Verify the Next button is disabled because no data was entered')
+  checkout.getNextButton().should('be.disabled')
 
 
 })
@@ -85,10 +97,11 @@ it('Checkout shopping cart as guest and verify unable to proceed with no data', 
 it('Verifying error message when entering invalid postal code', () => {
 
   cy.log('Entering invalid postal code, exaple: 32')
-  cy.contains('Pincode').type('32')
+  checkout.getPinCodeField().type('32')
 
   cy.log('Verify that you will get an error message to enter a valid one')
-  cy.get('input-error-msg', { timeout: 10000 }).should('be.visible').should('have.text', 'Please enter a valid Pincode')
+  checkout.getPinCodeError().should('be.visible')
+    .should('have.text', '\n    Please enter a valid Pincode.\n  ')
 
 })
 
